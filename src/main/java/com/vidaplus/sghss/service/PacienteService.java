@@ -41,7 +41,7 @@ public class PacienteService {
 
     public void deletarPorId(Long id) {
         if (!pacienteRepository.existsById(id)) {
-            throw new RuntimeException("Erro ao deletar paciente, paciente não encontrado!");
+            throw new RuntimeException("Erro ao deletarr paciente, paciente não encontrado!");
         }
         pacienteRepository.deleteById(id);
     }
