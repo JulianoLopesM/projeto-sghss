@@ -43,7 +43,7 @@ public class ConsultaController {
         }
     }
 
-    class RemarcarRequest {
+    static class RemarcarRequest {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         public LocalDateTime novaDataHora;
     }
