@@ -45,6 +45,24 @@ public class ConsultaService {
         consultaRepository.save(consulta);
     }
 
+    public Consulta remarcarConsulta(Long consultaCanceladaId, LocalDateTime novaDataHora) {
+        Consulta consultaAntiga = consultaRepository.findById(consultaCanceladaId)
+                .orElseThrow(() -> new RuntimeException("Consulta original não encontrada para remarcação!"));
+
+        Paciente paciente = consultaAntiga.getPaciente();
+        Profissional profissional = consultaAntiga.getProfissional();
+
+        Consulta novaConsulta = new Consulta();
+        novaConsulta.setPaciente(paciente);
+        novaConsulta.setProfissional(profissional);
+        novaConsulta.setDataHora(novaDataHora);
+        novaConsulta.setStatus("AGENDADA"); // O status da nova consulta é AGENDADA.
+
+        return consultaRepository.save(novaConsulta);
+    }
+
+
+
     public Consulta adicionarObservacao(Long consultaId, String observacao) {
         Consulta consulta = consultaRepository.findById(consultaId)
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada!"));

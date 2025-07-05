@@ -4,6 +4,8 @@ import com.vidaplus.sghss.entity.Consulta;
 import com.vidaplus.sghss.service.ConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -31,8 +33,29 @@ public class ConsultaController {
     }
 
     @PatchMapping("/{consultaId}/cancelar")
-    public void cancelar(@PathVariable Long consultaId) {
-        consultaService.cancelarConsulta(consultaId);
+    public ResponseEntity<String> cancelar(@PathVariable Long consultaId) {
+        try {
+            consultaService.cancelarConsulta(consultaId);
+            return ResponseEntity.ok("Consulta cancelada com sucesso");
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    class RemarcarRequest {
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        public LocalDateTime novaDataHora;
+    }
+
+    @PatchMapping("/{consultaId}/remarcar")
+    public ResponseEntity<Consulta> remarcar(@PathVariable Long consultaId, @RequestBody RemarcarRequest request) {
+        try {
+            Consulta consultaRemarcada = consultaService.remarcarConsulta(consultaId, request.novaDataHora);
+            return ResponseEntity.ok(consultaRemarcada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/paciente/{pacienteId}/futuras")
