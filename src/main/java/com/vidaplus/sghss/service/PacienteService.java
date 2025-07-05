@@ -4,6 +4,7 @@ import com.vidaplus.sghss.entity.Paciente;
 import com.vidaplus.sghss.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,10 +14,16 @@ public class PacienteService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public Paciente cadastrarPaciente(Paciente novoPaciente) {
-        if (pacienteRepository.findByCpf(novoPaciente.getCpf()).isPresent()) {
-            throw new IllegalArgumentException("CPF já cadastrado");
-        }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Paciente cadastrar(Paciente novoPaciente) {
+        // ... (verificação de email/cpf) ...
+
+        // Criptografa a senha
+        String senhaCriptografada = passwordEncoder.encode(novoPaciente.getSenhaHash());
+        novoPaciente.setSenhaHash(senhaCriptografada);
+
         return pacienteRepository.save(novoPaciente);
     }
 

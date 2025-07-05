@@ -17,7 +17,7 @@ public class PacienteController {
 
     @PostMapping
     public ResponseEntity<Paciente> cadastrar(@RequestBody Paciente paciente) {
-        return ResponseEntity.status(201).body(pacienteService.cadastrarPaciente(paciente));
+        return ResponseEntity.status(201).body(pacienteService.cadastrar(paciente));
     }
 
     @GetMapping
